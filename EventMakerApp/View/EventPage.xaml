@@ -1,0 +1,54 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:viewModel="using:EventMakerApp.ViewModel"
+    x:Class="EventMakerApp.View.EventPage"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <DataTemplate x:Key="EventDataTemplate">
+            <Grid>
+                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,10">
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name}" FontFamily="Rockwell" FontSize="20"/>
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Description}"/>
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Place}"/>
+                    <TextBlock TextWrapping="Wrap" Text="{Binding DateTime}"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+    <Page.DataContext>
+        <viewModel:EventVm/>
+    </Page.DataContext>
+    <Grid>
+        <TextBlock Text="EVENT CALENDER" Margin="0,100" HorizontalAlignment="Center" FontSize="34"/>
+        <ListView x:Name="ListView"  HorizontalAlignment="Left" Height="338" Margin="177,266,0,0" VerticalAlignment="Top" Width="430" ItemsSource="{Binding EventCatalogSingleton.Events}" ItemTemplate="{StaticResource EventDataTemplate}" >
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="SelectionChanged">
+                    <core:InvokeCommandAction Command="{Binding SelectedEventCommand}" CommandParameter="{Binding SelectedItem, ElementName=ListView}"/>
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+        </ListView>
+        <!--App Bar Button for Add Event-->
+        <AppBarButton HorizontalAlignment="Left" Icon="Add" Label="Create Event" Width="Auto" Margin="662,354,0,0"  Background="Aqua">
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="Click">
+                    <core:NavigateToPageAction TargetPage="EventMakerApp.View.CreateEventPage"/>
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+        </AppBarButton>
+        <AppBarButton HorizontalAlignment="Left" Icon="Delete" Label="Delete Event" Width="Auto" RenderTransformOrigin="12.787,8.11" Margin="753,353,0,0" Background="BurlyWood">
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="Click">
+                    <core:InvokeCommandAction Command="{Binding DeleteEventCommand}"/>
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+        </AppBarButton>
+
+
+    </Grid>
+</Page>
